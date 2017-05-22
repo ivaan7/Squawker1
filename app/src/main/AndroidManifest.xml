@@ -21,7 +21,7 @@
         </activity>
 
         <provider
-            android:name=".provider.SquawkProvider"
+            android:name=".provider.generated.SquawkProvider"
             android:authorities="android.example.com.squawker.provider.provider"
             android:exported="false" />
 
@@ -41,7 +41,7 @@
         </service>
 
         <service
-            android:name=".fcm.MyFirebaseMessagingService">
+            android:name=".fcm.SquawkFirebaseMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

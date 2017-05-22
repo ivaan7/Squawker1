@@ -20,8 +20,32 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.example.com.squawker.MainActivity;
+import android.example.com.squawker.R;
+import android.example.com.squawker.provider.SquawkContract;
+import android.example.com.squawker.provider.SquawkProvider;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
+
+/**
+ * Listens for squawk FCM messages both in the background and the foreground and responds
+ * appropriately
+ * depending on type of message
+ */
+public class SquawkFirebaseMessageService extends FirebaseMessagingService {
 
     private static final String JSON_KEY_AUTHOR = SquawkContract.COLUMN_AUTHOR;
     private static final String JSON_KEY_AUTHOR_KEY = SquawkContract.COLUMN_AUTHOR_KEY;
@@ -29,8 +53,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String JSON_KEY_DATE = SquawkContract.COLUMN_DATE;
 
     private static final int NOTIFICATION_MAX_CHARACTERS = 30;
-    private static String LOG_TAG = MyFirebaseMessagingService.class.getSimpleName();
+    private static String LOG_TAG = SquawkFirebaseMessageService.class.getSimpleName();
 
+    /**
+     * Called when message is received.
+     *
+     * @param remoteMessage Object representing the message received from Firebase Cloud Messaging
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // There are two types of messages data messages and notification messages. Data messages
